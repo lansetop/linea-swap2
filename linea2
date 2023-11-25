@@ -1,0 +1,22 @@
+pragma solidity ^0.5.16;
+
+interface IERC20 {
+    function transfer(address recipient, uint256 amount) external returns (bool);
+    function balanceOf(address account) external view returns (uint256);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+}
+
+contract LineaSwap {
+    IERC20 public token1;
+    IERC20 public token2;
+
+    constructor(address _token1, address _token2) public {
+        token1 = IERC20(_token1);
+        token2 = IERC20(_token2);
+    }
+
+    function swap(uint256 amount) public {
+        require(token1.transferFrom(msg.sender, address(this), amount), "Transfer of token1 failed");
+        require(token2.transfer(msg.sender, amount), "Transfer of token2 failed");
+    }
+}
